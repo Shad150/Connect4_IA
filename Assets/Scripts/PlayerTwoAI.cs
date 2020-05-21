@@ -22,7 +22,7 @@ public class PlayerTwoAI : AI
     {
         int column = ObtainColumnWith3();
 
-        
+        int RandomPosition = Random.Range(0, 6);
 
         if (column == -1)
         {
@@ -30,7 +30,7 @@ public class PlayerTwoAI : AI
 
             if (column == -1)
             {
-                column = 2;
+                column = RandomPosition;
             }
         }
         return column;
@@ -44,9 +44,9 @@ public class PlayerTwoAI : AI
             int numPiecesMineStrike = 0;
             int numPiecesEnemyStrike = 0;
 
-            for (int row = Config.numRows -1; row >= 0; row--)
+            for (int row = Config.numRows - 1; row >= 0; row--)
             {
-                //1//
+                //DEFENSE//
 
                 if (board[column][row] == Piece.PlayerTwo)
                 {
@@ -61,14 +61,19 @@ public class PlayerTwoAI : AI
                 {
                     int rowAbove = row - 1;
 
-                    if (board[column][rowAbove] == Piece.Empty)
+                    if (row - 1 >= 0)
                     {
-                        return column;
+
+                        Debug.Log(" ");
+                        if (board[column][rowAbove] == Piece.Empty)
+                        {
+                            return column;
+                        }
                     }
+                    
                 }
 
-                    //1//
-                    //2//
+                    //ATTACK//
 
                 if (board[column][row] == Piece.PlayerOne)
                 {
@@ -83,100 +88,181 @@ public class PlayerTwoAI : AI
                 {
                     int rowAbove = row - 1;
 
-                    if (board[column][rowAbove] == Piece.Empty)
+                    if (row - 1 >= 0)
                     {
-                        return column;
+                        Debug.Log(" ");
+                        if (board[column][rowAbove] == Piece.Empty)
+                        {
+                            return column;
+                        }
                     }
                 }
-                    //2//
             }
-        } 
+        }
         
         return -1;
     }
+
+    //------------------------//
 
     public int ObtainRowWith3()
     {
 
         for (int column = 0; column < Config.numColumns; column++)
         {
-            int numPiecesMineStrike = 0;
-            int numPiecesEnemyStrike = 0;
 
-            
+            //DEFENSE//
 
-            for (int row = Config.numRows - 1; row >= 0; row--) 
+            for (int row = Config.numRows - 1; row >= 0; row--)
             {
-                Debug.Log(column + " , " + row);
-                if (board[column][row] == Piece.PlayerTwo)
-                {
-                    
-                    numPiecesMineStrike++;
-                }
-                else
-                {
-                    numPiecesMineStrike = 0;
-                }
 
-                if (numPiecesMineStrike >= 3)
+                if (column + 1 < Config.numColumns)
                 {
-                    int columnR = column + 1;
-                    int columnL = column - 3;
 
-                    if (board[columnR][row] == Piece.Empty)
+                    if (board[column][row] == Piece.PlayerTwo)
                     {
-                        return column;
-                    }
-                    else if (board[columnL][row] == Piece.Empty)
-                    {
-                        return column;
+
+                        if (board[column + 1][row] == Piece.PlayerTwo)
+                        {
+
+                            if (column + 2 < Config.numColumns)
+                            {
+                                
+                                if (board[column + 2][row] == Piece.PlayerTwo)
+                                {
+
+                                    int columnR = column + 3;
+                                    int columnL = column - 1;
+
+                                    if (column - 1 >= 0)
+                                    {
+                                        if (row + 1 <= 5)
+                                        {
+                                            if (board[column - 1][row + 1] == Piece.Empty)
+                                            {
+
+                                            }
+                                            else if (board[columnL][row] == Piece.Empty)
+                                            {
+                                                return column - 1;
+                                            }
+                                        }
+                                        else if (board[columnL][row] == Piece.Empty)
+                                        {
+                                            return column - 1;
+                                        }
+
+                                        if (column + 3 < Config.numColumns)
+                                        {
+                                            if (row - 1 >= 0)
+                                            {
+                                                if (board[column + 3][row - 1] == Piece.Empty)
+                                                {
+                                                
+                                                }
+                                                else if (board[columnR][row] == Piece.Empty)
+                                                {
+                                                    return column + 3;
+                                                }
+                                            }
+
+                                            if (board[columnR][row] == Piece.Empty)
+                                            {
+                                                return column + 3;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
-
-                //1//
-
-                //2//
-
-                if (board[column][row] == Piece.PlayerOne)
-                {
-                    numPiecesEnemyStrike++;
-                }
-                else
-                {
-                    numPiecesEnemyStrike = 0;
-                }
-
-                if (numPiecesEnemyStrike >= 3)
-                {
-                    int columnR = column + 1;
-                    int columnL = column - 3;
-
-                    if (board[columnR][row] == Piece.Empty)
-                    {
-                        return column;
-                    }
-                    else if (board[columnL][row] == Piece.Empty)
-                    {
-                        return column;
-                    }
-                }
-            }
-
             
-        }
 
-        return -1;
+                //ATTACK//
+
+                if (column + 1 < Config.numColumns)
+                {
+                    if (board[column][row] == Piece.PlayerOne)
+                    {
+
+                        if (board[column + 1][row] == Piece.PlayerOne)
+                        {
+
+                            if (column + 2 < Config.numColumns)
+                            {
+
+                                if (board[column + 2][row] == Piece.PlayerOne)
+                                {
+
+                                    int columnR = column + 3;
+                                    int columnL = column - 1;
+
+                                    
+
+                                    if (column -1 >= 0)
+                                    {
+                                        if (row + 1 <= 5)
+                                        {
+                                            if (board[column -1][row + 1] == Piece.Empty)
+                                            {
+
+                                            }
+                                            else if (board[columnL][row] == Piece.Empty)
+                                            {
+                                                return column - 1;
+                                            }
+                                        }
+                                        else if (board[columnL][row] == Piece.Empty)
+                                        {
+                                            return column - 1;
+                                        }
+
+                                        
+                                    }
+
+                                    if (column + 3 < Config.numColumns)
+                                    {
+                                        if (row - 1 >= 0)
+                                        {
+                                            if (board[column + 3][row - 1] == Piece.Empty)
+                                            {
+
+                                            }
+                                            else if (board[columnR][row] == Piece.Empty)
+                                            {
+                                                return column + 3;
+                                            }
+                                        }
+
+                                        if (board[columnR][row] == Piece.Empty)
+                                        {
+                                            return column + 3;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+            }
+        }
+    
+
+    return -1;
+   
     }
 
 
 
-    /**
-     *  [Función de ejemplo, se puede borrar]
-     *  Devuelve todas las columnas del tablero vacías. Devolverá la misma columna tantas veces como casillas
-     *  tenga disponibles. Por lo tanto, si escogemos la columna aleatoriamente, habrá más
-     *  posibilidad de seleccionar nuestro próximo movimiento como aquella columna que tenga más casillas vacías.
-     **/
-    public List<int> GetPossibleMoves()
+        /**
+         *  [Función de ejemplo, se puede borrar]
+         *  Devuelve todas las columnas del tablero vacías. Devolverá la misma columna tantas veces como casillas
+         *  tenga disponibles. Por lo tanto, si escogemos la columna aleatoriamente, habrá más
+         *  posibilidad de seleccionar nuestro próximo movimiento como aquella columna que tenga más casillas vacías.
+         **/
+        public List<int> GetPossibleMoves()
     {
         List<int> possibleMoves = new List<int>();
 
